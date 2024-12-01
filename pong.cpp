@@ -2,6 +2,7 @@
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <iostream>
 
@@ -17,6 +18,10 @@ int main() {
     return 1;
   }
 
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+  SDL_RenderClear(renderer);
+  SDL_Rect racket = {200, 200, 400, 400};
+
   bool quit = false;
   SDL_Event e;
 
@@ -25,6 +30,12 @@ int main() {
       if (e.type == SDL_QUIT) {
         quit = true;
       }
+
+      SDL_Delay(10);
+
+      SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+      SDL_RenderFillRect(renderer, &racket);
+      SDL_RenderPresent(renderer);
     }
   }
 
@@ -56,8 +67,6 @@ bool init() {
     return false;
   }
 
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderClear(renderer);
   return true;
 }
 
