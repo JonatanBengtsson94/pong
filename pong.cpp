@@ -1,7 +1,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <iostream>
@@ -100,7 +102,10 @@ bool loop() {
     }
 
     if (e.type == SDL_KEYUP) {
-      playerRacket.velocity = 0;
+      if (!(SDL_GetKeyboardState(NULL)[SDL_SCANCODE_UP] ||
+            SDL_GetKeyboardState(NULL)[SDL_SCANCODE_DOWN])) {
+        playerRacket.velocity = 0;
+      }
     }
   }
 
