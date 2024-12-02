@@ -14,12 +14,11 @@ void kill();
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 
+Uint32 lastUpdate = 0;
+
 struct racket {
-  int x;
-  int y;
-  int width;
-  int height;
-  int velocity;
+  float x, y, velocity;
+  int width, height;
 };
 
 racket playerRacket, opponentRacket;
@@ -33,7 +32,6 @@ int main() {
   setup();
 
   while (loop()) {
-    SDL_Delay(10);
   }
 
   kill();
@@ -93,10 +91,10 @@ bool loop() {
     if (e.type == SDL_KEYDOWN) {
       switch (e.key.keysym.sym) {
       case SDLK_UP:
-        playerRacket.velocity = -1;
+        playerRacket.velocity = -100.0f;
         break;
       case SDLK_DOWN:
-        playerRacket.velocity = 1;
+        playerRacket.velocity = 100.0f;
         break;
       }
     }
@@ -107,7 +105,11 @@ bool loop() {
   }
 
   // Physics Loop
-  playerRacket.y += playerRacket.velocity;
+  Uint32 time = SDL_GetTicks();
+  float deltaTime = (time - lastUpdate) / 1000.0f;
+  lastUpdate = time;
+
+  playerRacket.y += playerRacket.velocity * deltaTime;
 
   // Render
   // Background
@@ -115,9 +117,9 @@ bool loop() {
   SDL_RenderClear(renderer);
 
   // Racket
-  SDL_Rect playerRacketRect = {playerRacket.x, playerRacket.y,
+  SDL_Rect playerRacketRect = {(int)playerRacket.x, (int)playerRacket.y,
                                playerRacket.width, playerRacket.height};
-  SDL_Rect opponentRacketRect = {opponentRacket.x, opponentRacket.y,
+  SDL_Rect opponentRacketRect = {(int)opponentRacket.x, (int)opponentRacket.y,
                                  opponentRacket.width, opponentRacket.height};
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   SDL_RenderFillRect(renderer, &playerRacketRect);
