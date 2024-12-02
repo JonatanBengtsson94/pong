@@ -7,6 +7,7 @@
 #include <iostream>
 
 bool init();
+bool loop();
 void kill();
 
 SDL_Window *window = NULL;
@@ -18,25 +19,8 @@ int main() {
     return 1;
   }
 
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-  SDL_RenderClear(renderer);
-  SDL_Rect racket = {200, 200, 400, 400};
-
-  bool quit = false;
-  SDL_Event e;
-
-  while (!quit) {
-    while (SDL_PollEvent(&e) != 0) {
-      if (e.type == SDL_QUIT) {
-        quit = true;
-      }
-
-      SDL_Delay(10);
-
-      SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-      SDL_RenderFillRect(renderer, &racket);
-      SDL_RenderPresent(renderer);
-    }
+  while (loop()) {
+    SDL_Delay(10);
   }
 
   kill();
@@ -67,6 +51,25 @@ bool init() {
     return false;
   }
 
+  return true;
+}
+
+bool loop() {
+  SDL_Event e;
+
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+  SDL_RenderClear(renderer);
+  SDL_Rect racket = {200, 200, 400, 400};
+
+  while (SDL_PollEvent(&e) != 0) {
+    if (e.type == SDL_QUIT) {
+      return false;
+    }
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderFillRect(renderer, &racket);
+    SDL_RenderPresent(renderer);
+  }
   return true;
 }
 
