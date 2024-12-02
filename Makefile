@@ -1,7 +1,7 @@
 build:
 	@mkdir -p ./build
-	g++ -o ./build/pong *.cpp -lSDL2
+	g++ -Wall -o ./build/pong *.cpp -lSDL2
 run:
-	./pong
+	./build/pong
 clean:
 	rm -rf ./build
