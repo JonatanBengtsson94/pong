@@ -20,7 +20,9 @@ struct racket {
   int width;
   int height;
   int velocity;
-} racket;
+};
+
+racket playerRacket, opponentRacket;
 
 int main() {
 
@@ -66,11 +68,17 @@ bool init() {
 }
 
 void setup() {
-  racket.x = 100;
-  racket.y = 100;
-  racket.width = 50;
-  racket.height = 100;
-  racket.velocity = 0;
+  playerRacket.x = 100;
+  playerRacket.y = 100;
+  playerRacket.width = 50;
+  playerRacket.height = 100;
+  playerRacket.velocity = 0;
+
+  opponentRacket.x = 700;
+  opponentRacket.y = 700;
+  opponentRacket.width = 50;
+  opponentRacket.height = 100;
+  opponentRacket.velocity = 0;
 }
 
 bool loop() {
@@ -85,21 +93,21 @@ bool loop() {
     if (e.type == SDL_KEYDOWN) {
       switch (e.key.keysym.sym) {
       case SDLK_UP:
-        racket.velocity = -1;
+        playerRacket.velocity = -1;
         break;
       case SDLK_DOWN:
-        racket.velocity = 1;
+        playerRacket.velocity = 1;
         break;
       }
     }
 
     if (e.type == SDL_KEYUP) {
-      racket.velocity = 0;
+      playerRacket.velocity = 0;
     }
   }
 
   // Physics Loop
-  racket.y += racket.velocity;
+  playerRacket.y += playerRacket.velocity;
 
   // Render
   // Background
@@ -107,9 +115,13 @@ bool loop() {
   SDL_RenderClear(renderer);
 
   // Racket
-  SDL_Rect racket_rect = {racket.x, racket.y, racket.width, racket.height};
+  SDL_Rect playerRacketRect = {playerRacket.x, playerRacket.y,
+                               playerRacket.width, playerRacket.height};
+  SDL_Rect opponentRacketRect = {opponentRacket.x, opponentRacket.y,
+                                 opponentRacket.width, opponentRacket.height};
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderFillRect(renderer, &racket_rect);
+  SDL_RenderFillRect(renderer, &playerRacketRect);
+  SDL_RenderFillRect(renderer, &opponentRacketRect);
 
   // Display
   SDL_RenderPresent(renderer);
