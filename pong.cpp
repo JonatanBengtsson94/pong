@@ -19,6 +19,7 @@ struct racket {
   int y;
   int width;
   int height;
+  int velocity;
 } racket;
 
 int main() {
@@ -69,6 +70,7 @@ void setup() {
   racket.y = 100;
   racket.width = 50;
   racket.height = 100;
+  racket.velocity = 0;
 }
 
 bool loop() {
@@ -79,7 +81,25 @@ bool loop() {
     if (e.type == SDL_QUIT) {
       return false;
     }
+
+    if (e.type == SDL_KEYDOWN) {
+      switch (e.key.keysym.sym) {
+      case SDLK_UP:
+        racket.velocity = -1;
+        break;
+      case SDLK_DOWN:
+        racket.velocity = 1;
+        break;
+      }
+    }
+
+    if (e.type == SDL_KEYUP) {
+      racket.velocity = 0;
+    }
   }
+
+  // Physics Loop
+  racket.y += racket.velocity;
 
   // Render
   // Background
